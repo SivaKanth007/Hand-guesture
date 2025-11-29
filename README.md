@@ -29,21 +29,46 @@ A Python-based AI application that allows you to control your mouse cursor using
     cd hand-gesture-controller
     ```
 
-2.  **Create a virtual environment (Recommended)**
-    ```bash
-    # Windows
-    python -m venv venv
-    .\venv\Scripts\activate
+2.  **Post-clone setup (virtual environment or system Python)**
 
-    # macOS/Linux
-    python3 -m venv venv
-    source venv/bin/activate
-    ```
+After cloning this repository you have two common options to run the project:
 
-3.  **Install dependencies**
-    ```bash
-    pip install -r requirements.txt
-    ```
+Option A — Create and use a local virtual environment (recommended):
+
+```powershell
+# Create venv
+python -m venv venv
+
+# PowerShell (activate)
+.\venv\Scripts\Activate.ps1
+
+# cmd.exe (activate)
+.\venv\Scripts\activate.bat
+
+# macOS / Linux (bash/zsh)
+python3 -m venv venv
+source venv/bin/activate
+```
+
+Once the virtual environment is active, install dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+Note: This project does not include a `venv` directory — do not commit your local virtual environment. The `.gitignore` already excludes `venv/`.
+
+Option B — Use your system Python (no virtual environment):
+
+If you prefer not to create a virtual environment, install the dependencies directly using your system Python. This will install packages globally or into your user site-packages depending on your pip configuration.
+
+```bash
+pip install -r requirements.txt
+# or to install for the current user without admin rights:
+pip install --user -r requirements.txt
+```
+
+Choose the option that fits your workflow. Using a virtual environment is recommended to avoid dependency conflicts with other Python projects on your machine.
 
 ## 🚀 Usage
 
