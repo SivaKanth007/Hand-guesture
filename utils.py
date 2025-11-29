@@ -29,11 +29,55 @@ def calculate_distance(p1, p2):
     """
     return math.hypot(p1.x - p2.x, p1.y - p2.y)
 
-def smooth_coordinates(current_x, current_y, prev_x, prev_y, smoothing_factor=0.5):
-    """
-    Applies exponential smoothing to coordinates.
-    smoothing_factor: 0.0 to 1.0. Higher value = less smoothing (more responsive), lower = more smoothing (less jitter).
-    """
-    new_x = prev_x + (current_x - prev_x) * smoothing_factor
-    new_y = prev_y + (current_y - prev_y) * smoothing_factor
-    return int(new_x), int(new_y)
+class OneEuroFilter:
+    def __init__(self, t0, x0, dx0=0.0, min_cutoff=1.0, beta=0.0, d_cutoff=1.0):
+        """
+        Initialize the One Euro Filter.
+        min_cutoff: Min cutoff frequency in Hz. Lower = more smoothing at low speeds.
+        beta: Speed coefficient. Higher = less lag at high speeds.
+        d_cutoff: Cutoff frequency for derivative.
+        """
+        self.t_prev = t0
+        self.x_prev = x0
+        self.dx_prev = dx0
+        self.min_cutoff = min_cutoff
+        self.beta = beta
+        self.d_cutoff = d_cutoff
+
+    def smoothing_factor(self, t_e, cutoff):
+        r = 2 * math.pi * cutoff * t_e
+        return r / (r + 1)
+
+    def exponential_smoothing(self, a, x, x_prev):
+        return a * x + (1 - a) * x_prev
+
+    def __call__(self, t, x):
+        """
+        Filter the signal.
+        t: Current timestamp.
+        x: Current value.
+        """
+        t_e = t - self.t_prev
+        
+        # Prevent division by zero or negative time
+        if t_e <= 0:
+            return self.x_prev
+
+        # Estimate derivative (speed)
+        a_d = self.smoothing_factor(t_e, self.d_cutoff)
+        dx = (x - self.x_prev) / t_e
+        dx_hat = self.exponential_smoothing(a_d, dx, self.dx_prev)
+
+        # Calculate cutoff based on speed
+        cutoff = self.min_cutoff + self.beta * abs(dx_hat)
+        a = self.smoothing_factor(t_e, cutoff)
+        
+        # Filter the signal
+        x_hat = self.exponential_smoothing(a, x, self.x_prev)
+
+        # Update state
+        self.x_prev = x_hat
+        self.dx_prev = dx_hat
+        self.t_prev = t
+        
+        return x_hat

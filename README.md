@@ -31,44 +31,44 @@ A Python-based AI application that allows you to control your mouse cursor using
 
 2.  **Post-clone setup (virtual environment or system Python)**
 
-After cloning this repository you have two common options to run the project:
+    After cloning this repository you have two common options to run the project:
 
-Option A — Create and use a local virtual environment (recommended):
+    Option A — Create and use a local virtual environment (recommended):
 
-```powershell
-# Create venv
-python -m venv venv
+    ```powershell
+    # Create venv
+    python -m venv venv
 
-# PowerShell (activate)
-.\venv\Scripts\Activate.ps1
+    # PowerShell (activate)
+    .\venv\Scripts\Activate.ps1
 
-# cmd.exe (activate)
-.\venv\Scripts\activate.bat
+    # cmd.exe (activate)
+    .\venv\Scripts\activate.bat
 
-# macOS / Linux (bash/zsh)
-python3 -m venv venv
-source venv/bin/activate
-```
+    # macOS / Linux (bash/zsh)
+    python3 -m venv venv
+    source venv/bin/activate
+    ```
 
-Once the virtual environment is active, install dependencies:
+    Once the virtual environment is active, install dependencies:
 
-```bash
-pip install -r requirements.txt
-```
+    ```bash
+    pip install -r requirements.txt
+    ```
 
-Note: This project does not include a `venv` directory — do not commit your local virtual environment. The `.gitignore` already excludes `venv/`.
+    Note: This project does not include a `venv` directory — do not commit your local virtual environment. The `.gitignore` already excludes `venv/`.
 
-Option B — Use your system Python (no virtual environment):
+    Option B — Use your system Python (no virtual environment):
 
-If you prefer not to create a virtual environment, install the dependencies directly using your system Python. This will install packages globally or into your user site-packages depending on your pip configuration.
+    If you prefer not to create a virtual environment, install the dependencies directly using your system Python. This will install packages globally or into your user site-packages depending on your pip configuration.
 
-```bash
-pip install -r requirements.txt
-# or to install for the current user without admin rights:
-pip install --user -r requirements.txt
-```
+    ```bash
+    pip install -r requirements.txt
+    # or to install for the current user without admin rights:
+    pip install --user -r requirements.txt
+    ```
 
-Choose the option that fits your workflow. Using a virtual environment is recommended to avoid dependency conflicts with other Python projects on your machine.
+    Choose the option that fits your workflow. Using a virtual environment is recommended to avoid dependency conflicts with other Python projects on your machine.
 
 ## 🚀 Usage
 
@@ -78,20 +78,27 @@ Choose the option that fits your workflow. Using a virtual environment is recomm
     ```
 
 2.  **Controls**
-    *   **Move Cursor**: Raise your hand and point with your **Index Finger**. The cursor will follow your finger tip.
-    *   **Left Click / Drag**: Pinch your **Index Finger** and **Thumb** together.
-        *   *Quick Pinch*: Single Click.
-        *   *Pinch & Hold*: Click and Drag.
-    *   **Exit**: Press the `Esc` key to close the application.
+    *   **Move Cursor**: Point with your **Index Finger**. The cursor follows your **Knuckle** for maximum stability.
+    *   **Left Click**: Pinch **Index Finger** and **Thumb** quickly.
+    *   **Double Click**: Pinch **Index Finger** and **Thumb** twice quickly.
+    *   **Right Click**: Pinch **Middle Finger** and **Thumb**.
+    *   **Drag & Drop**: Pinch **Index Finger** and **Thumb** and **HOLD** for 0.5 seconds. The cursor will unlock and follow your hand.
+    *   **Minimize Windows**: Make a **Fist** (0 fingers up).
+    *   **Restore Windows**: Show an **Open Palm** (5 fingers up).
+    *   **Exit**: Press `Esc` to close.
+
+3.  **Features**
+    *   **FPS Counter**: Real-time performance monitoring in the top-left corner.
+    *   **Anti-Jitter**: Uses "One Euro Filter" and a Deadzone for buttery smooth precision.
+    *   **Smart Locking**: Cursor freezes during clicks to prevent accidental movement.
 
 ## ⚙️ Configuration
 
-You can tweak the sensitivity and behavior in `main.py`:
+You can tweak the sensitivity in `main.py`:
 
-*   **Smoothing**: Adjust `smoothing_factor` (default `0.2`).
-    *   Higher value (e.g., `0.5`) = Faster response, more jitter.
-    *   Lower value (e.g., `0.1`) = Smoother movement, slightly more lag.
-*   **Click Sensitivity**: Adjust `click_start_threshold` and `click_stop_threshold`.
+*   **Smoothing**: Adjusted via `OneEuroFilter` parameters in `HandController.__init__`.
+*   **Deadzone**: `self.deadzone = 3` (pixels).
+*   **Drag Delay**: `0.5` seconds (in `process_gestures`).
 
 ## 🔧 Troubleshooting
 
